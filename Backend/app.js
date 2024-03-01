@@ -2,6 +2,7 @@ import { createServer } from 'http';
 import express from 'express';
 import cors from 'cors';
 import logger from './middlewares/logging.middleware.js';
+import veranstaltungsRouteController from './controllers/veranstaltungs.controller.js';
 import bodyParser from 'body-parser';
 import fs from 'fs';
 
