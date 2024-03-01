@@ -29,14 +29,6 @@ server.get('/', (req, res) => {
   res.send('Hallo');
 });
 
-server.listen(port, () => {
-  console.log('Running auf Port: ${port}');
-});
-
-// Space
-
-
-// Kopie
 
 // Datenstruktur für Veranstaltungen initialisieren
 let veranstaltungen = [];
@@ -56,8 +48,8 @@ app.get('/veranstaltungen/ausstehend', (req, res) => {
 // API-Endpunkt: Neue Veranstaltung anlegen
 app.post('/veranstaltungen', (req, res) => {
     const { name, beschreibung, ort, datum, preis } = req.body;
-    if (!name || !beschreibung || !ort || !datum) { // Überprüfung auf Vollständigkeit
-        return res.status(400).send('Erforderliche Felder fehlen');
+    if (!name || !beschreibung || !ort || !datum || !preis) { // Überprüfung auf Vollständigkeit
+        return res.status(400).send('Pflichtfelder nicht ausgefüllt');
     }
     const neueVeranstaltung = { id: veranstaltungen.length + 1, name, beschreibung, ort, datum, preis: preis || 'Kostenlos', genehmigt: false };
     veranstaltungen.push(neueVeranstaltung);
@@ -107,12 +99,16 @@ app.patch('/veranstaltungen/:id/genehmigen', (req, res) => {
     if (!veranstaltung) {
         return res.status(404).send('Veranstaltung nicht gefunden');
     }
-    if (veranstaltung.genehmigt) {
+    else if (veranstaltung.genehmigt) {
         return res.status(400).send('Veranstaltung bereits genehmigt');
+
     }
+
+    // Genehmigungslogik
     veranstaltung.genehmigt = true;
-    insAuditLogSchreiben(`Veranstaltung genehmigt: ${veranstaltung.id}`);
-    res.json(veranstaltung);
+    // Veranstaltung als genehmigt  markieren und die Änderungen  speichern
+    return res.json(veranstaltung); // Sendet die aktualisierte Veranstaltung zurück
+
 });
 
 // API-Endpunkt für die Übermittlung von externen Daten
