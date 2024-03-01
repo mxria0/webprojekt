@@ -18,8 +18,8 @@ server.use(logger);
 // Veranstaltungs-Controller einrichten
 server.use('/api/v1/veranstaltungen', veranstaltungsRouteController); // Basispfad für Veranstaltungs-Endpunkte
 
-server.listen(PORT, () => {
-  console.log(`Server läuft auf Port ${PORT}`);
+server.listen(port, () => {
+  console.log(`Server läuft auf Port ${port}`);
 })
 
 
@@ -28,20 +28,20 @@ let veranstaltungen = [];
 const auditLogPfad = './audit.txt';
 
 // API-Endpunkt: Alle genehmigten Veranstaltungen abfragen, nach Datum sortiert
-app.get('/veranstaltungen', (req, res) => {
+server.get('/veranstaltungen', (req, res) => {
     const genehmigteVeranstaltungen = veranstaltungen.filter(veranstaltung => veranstaltung.genehmigt).sort((a, b) => new Date(b.datum) - new Date(a.datum));
     res.json(genehmigteVeranstaltungen);
 });
 
 // API-Endpunkt: Alle nicht genehmigten Veranstaltungen abfragen
-app.get('/veranstaltungen/ausstehend', (req, res) => {
+server.get('/veranstaltungen/ausstehend', (req, res) => {
     const ausstehendeVeranstaltungen = veranstaltungen.filter(veranstaltung => !veranstaltung.genehmigt);
     res.json(ausstehendeVeranstaltungen);
 });
 
 
 // API-Endpunkt: Veranstaltung anhand der ID abfragen
-app.get('/veranstaltungen/:id', (req, res) => {
+server.get('/veranstaltungen/:id', (req, res) => {
     const veranstaltung = veranstaltungen.find(veranstaltung => veranstaltung.id === parseInt(req.params.id));
     if (!veranstaltung) {
         return res.status(404).send('Veranstaltung nicht gefunden');
@@ -50,14 +50,14 @@ app.get('/veranstaltungen/:id', (req, res) => {
 });
 
 // API-Endpunkt: Suche nach Veranstaltungen anhand von Titel oder Ort
-app.get('/veranstaltungen/suche', (req, res) => {
+server.get('/veranstaltungen/suche', (req, res) => {
     const { query } = req.query;
     const gefilterteVeranstaltungen = veranstaltungen.filter(veranstaltung => veranstaltung.name.includes(query) || veranstaltung.ort.includes(query));
     res.json(gefilterteVeranstaltungen);
 });
 
 // API-Endpunkt: Neue Veranstaltung anlegen
-app.post('/veranstaltungen', (req, res) => {
+server.post('/veranstaltungen', (req, res) => {
     const { name, beschreibung, ort, datum, preis } = req.body;
     if (!name || !beschreibung || !ort || !datum || !preis) { // Überprüfung auf Vollständigkeit
         return res.status(400).send('Pflichtfelder nicht ausgefüllt');
@@ -69,7 +69,7 @@ app.post('/veranstaltungen', (req, res) => {
 
 
 // API-Endpunkt: Veranstaltung löschen
-app.delete('/veranstaltungen/:id', (req, res) => {
+server.delete('/veranstaltungen/:id', (req, res) => {
     const index = veranstaltungen.findIndex(veranstaltung => veranstaltung.id === parseInt(req.params.id));
     if (index === -1) {
         return res.status(404).send('Veranstaltung nicht gefunden');
@@ -79,7 +79,7 @@ app.delete('/veranstaltungen/:id', (req, res) => {
 });
 
 // API-Endpunkt: Veranstaltung bearbeiten
-app.put('/veranstaltungen/:id', (req, res) => {
+server.put('/veranstaltungen/:id', (req, res) => {
     const index = veranstaltungen.findIndex(veranstaltung => veranstaltung.id === parseInt(req.params.id));
     if (index === -1) {
         return res.status(404).send('Veranstaltung nicht gefunden');
@@ -90,7 +90,7 @@ app.put('/veranstaltungen/:id', (req, res) => {
 });
 
 // API-Endpunkt: Veranstaltung genehmigen
-app.patch('/veranstaltungen/:id/genehmigen', (req, res) => {
+server.patch('/veranstaltungen/:id/genehmigen', (req, res) => {
     const veranstaltung = veranstaltungen.find(veranstaltung => veranstaltung.id === parseInt(req.params.id));
     if (!veranstaltung) {
         return res.status(404).send('Veranstaltung nicht gefunden');
@@ -105,13 +105,13 @@ app.patch('/veranstaltungen/:id/genehmigen', (req, res) => {
 });
 
 // API-Endpunkt für die Übermittlung von externen Daten
-app.post('/externe-daten', (req, res) => {
+server.post('/externe-daten', (req, res) => {
     // Logik zur Verarbeitung externer Daten könnte hier implementiert werden
     res.status(200).send('Externe Daten übermittelt');
 });
 
 // API-Endpunkt zum Erstellen von Testdaten
-app.get('/testdaten-generieren', (req, res) => {
+server.get('/testdaten-generieren', (req, res) => {
     // Beispiel für das Generieren von Testdaten
     veranstaltungen = [
         { id: 1, name: 'Testveranstaltung 1', beschreibung: 'Dies ist eine Testveranstaltung', ort: 'Heidenheim', datum: '2023-10-01', preis: 'Kostenlos', genehmigt: true },
@@ -152,7 +152,7 @@ server.patch('/api/v1/veranstaltungen/:id/genehmigen', (req, res) => {
 
 
 // Server starten
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server läuft auf Port ${port}`);
 });
 
