@@ -2,7 +2,7 @@ import express from "express";
 
 const VeranstaltungsRouteController = express.Router();
 
-const beers = [];
+const veranstaltungen = [];
 let currentIndex = 0;
 
 /**
