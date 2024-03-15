@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+/*import { Routes } from '@angular/router';
 
 export const routes: Routes = [];
 
@@ -73,4 +73,4 @@ const main = async () => {
   console.log('DeletePost: ', deletedPost);
 }
 
-main();
+main();*/
