@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Veranstaltung1",
+    "beschreibung": "beschreibung1",
+    "ort": "ort",
+    "datum": "01.01.2025",
+    "preis": 5,
+    "genehmigt": false
+  },
+  {
+    "id": 2,
+    "name": "Veranstaltung2",
+    "beschreibung": "beschreibung2",
+    "ort": "ort2",
+    "datum": "01.01.2026",
+    "preis": 10,
+    "genehmigt": false
+  },
+  {
+    "id": 3,
+    "name": "Veranstaltung3",
+    "beschreibung": "beschreibung3",
+    "ort": "ort3",
+    "datum": "02.01.2025",
+    "preis": 15,
+    "genehmigt": true
+  },
+  {
+    "id": 4,
+    "name": "Konzert",
+    "beschreibung": "Aktualisierte Beschreibung der Veranstaltung.",
+    "ort": "Ulm",
+    "datum": "2024-03-20",
+    "preis": 30,
+    "genehmigt": true
+  },
+  {
+    "id": 5,
+    "name": "Konzert",
+    "beschreibung": "Aktualisierte Beschreibung der Veranstaltung.",
+    "ort": "Aalen",
+    "datum": "2024-03-20",
+    "preis": 30,
+    "genehmigt": true
+  },
+  {
+    "id": 6,
+    "name": "Konzert",
+    "beschreibung": "Aktualisierte Beschreibung der Veranstaltung.",
+    "ort": "Aalen",
+    "datum": "2024-03-20",
+    "preis": 30,
+    "genehmigt": true
+  },
+  {
+    "id": 7,
+    "name": "Konzert",
+    "beschreibung": "Konzert lalal.",
+    "ort": "Ulam",
+    "datum": "2024-03-20",
+    "preis": 30,
+    "genehmigt": true
+  },
+  {
+    "id": 9,
+    "name": "Konzert",
+    "beschreibung": "Aktualisierte Beschreibung der Veranstaltung.",
+    "ort": "Aalen",
+    "datum": "2024-03-20",
+    "preis": 30,
+    "genehmigt": false
+  }
+]

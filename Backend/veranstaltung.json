@@ -1,0 +1,11 @@
+[
+    {
+        "id": 1,
+        "name": "Veranstaltung1",
+        "beschreibung": "beschreibung1",
+        "ort": "ort",
+        "datum": "01.01.2025",
+        "preis": 5,
+        "genehmigt": false
+    }
+]

@@ -23,7 +23,7 @@ server.listen(port, () => {
 
 
 // Datenstruktur für Veranstaltungen initialisieren
-let veranstaltungen = [];
+let veranstaltungen = require("./veranstaltung.json");
 const auditLogPfad = './audit.txt';
 
 // API-Endpunkt: Alle genehmigten Veranstaltungen abfragen, nach Datum sortiert
@@ -149,11 +149,6 @@ server.patch('/api/v1/veranstaltungen/:id/genehmigen', (req, res) => {
     });
 });
 
-
-// Server starten
-server.listen(port, () => {
-    console.log(`Server läuft auf Port ${port}`);
-});
 
 
 
