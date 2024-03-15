@@ -1,0 +1,22 @@
+.site-footer {
+    background-color: #002244;
+    color: white;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 10px 0;
+    width: 100%;
+    margin-top: 30px;
+  }
+  
+  .site-footer a {
+    color: #99ccff;
+    text-decoration: none;
+    padding: 0 5px;
+  }
+  
+  .site-footer a:hover {
+    text-decoration: underline;
+  }
+  

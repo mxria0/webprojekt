@@ -1,0 +1,16 @@
+<div class="event-list" *ngIf="events && events.length > 0; else noEvents">
+    <h2>Veranstaltungen</h2>
+    <ul>
+      <li *ngFor="let event of events">
+        <!-- Hier können Sie die Daten jedes Events anzeigen -->
+        <h3>{{ event.name }}</h3>
+        <p><strong>Datum:</strong> {{ event.date | date }}</p>
+        <p><strong>Ort:</strong> {{ event.location }}</p>
+      </li>
+    </ul>
+</div>
+
+<ng-template #noEvents>
+    <!-- Anzeige, wenn keine Events vorhanden sind -->
+    <p>Keine Veranstaltungen gefunden.</p>
+</ng-template>

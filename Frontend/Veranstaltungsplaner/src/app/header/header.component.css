@@ -1,0 +1,47 @@
+/* Grundlegende Styling-Anweisungen für den Header */
+.site-header {
+    background-color: #003366; /* Dunkelblauer Hintergrund */
+    color: white;
+    font-family: 'Arial', sans-serif; /* Sans-Serif Schrift */
+    width: 100%; /* Relative Breite */
+    padding: 10px 0;
+    position: fixed; /* Fixed Position, damit der Header beim Scrollen oben bleibt */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Sorgt dafür, dass der Header über anderen Elementen bleibt */
+  }
+  
+  /* Header ausblenden beim Scrollen */
+  /* Es wird eine kleine JavaScript-Funktion benötigt, um dies zu erreichen */
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+  }
+  
+  .navbar-brand img {
+    max-height: 50px;
+  }
+  
+  .navbar-nav {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-item {
+    margin-left: 20px;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: white; /* Weiße Schriftfarbe */
+  }
+  
+  .nav-link:hover {
+    color: #99ccff; /* Heller Blau für Hover Effekt */
+  }
+  

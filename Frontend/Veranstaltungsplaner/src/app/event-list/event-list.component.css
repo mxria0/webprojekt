@@ -1,0 +1,44 @@
+.event-list {
+    padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    background-color: #f8f9fa; // Hintergrundfarbe 
+    border-radius: 30px; // Abgerundete Ecken 
+    padding: 0; // Innenabstand 
+}
+
+.event-list h2 {
+    font-family: Arial, sans-serif; // Schriftart 
+    font-size: 24px; // Schriftgröße 
+    font-weight: bold; // Fettdruck 
+    margin-bottom: 10px; // Abstand nach unten 
+}
+
+.event-list h3 {
+    font-family: Arial, sans-serif; // Schriftart 
+    font-size: 18px; // Schriftgröße 
+    font-weight: bold; // Fettdruck 
+    margin-bottom: 5px; // Abstand nach unten 
+}
+
+.event-list p {
+    font-family: Arial, sans-serif; // Schriftart 
+    font-size: 14px; // Schriftgröße 
+    margin-bottom: 10px; // Abstand nach unten 
+}
+
+.event-list ul {
+    list-style: none; // Listenpunkte entfernen 
+    padding: 0;
+    margin: 0;
+}
+
+.event-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ced4da; // Trennlinien zwischen den Events 
+}
+
+.event-list li:hover {
+    background-color: #e9ecef; // Hintergrundfarbe bei Hover 
+}
