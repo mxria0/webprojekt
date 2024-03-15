@@ -1,8 +1,7 @@
-import { createServer } from 'http';
 import express from 'express';
 import cors from 'cors';
 import logger from './middlewares/logging.middleware.js';
-import bodyParser from 'body-parser';
+import veranstaltungsRouteController from './controllers/veranstaltungs.controller.js';
 import fs from 'fs';
 
 const port = 8080;
@@ -18,35 +17,46 @@ server.use(logger);
 // Veranstaltungs-Controller einrichten
 server.use('/api/v1/veranstaltungen', veranstaltungsRouteController); // Basispfad für Veranstaltungs-Endpunkte
 
-server.listen(PORT, () => {
-  console.log(`Server läuft auf Port ${PORT}`);
+server.listen(port, () => {
+  console.log(`Server läuft auf Port ${port}`);
 })
-
-//
-
-// Beispiel
-server.get('/', (req, res) => {
-  res.send('Hallo');
-});
 
 
 // Datenstruktur für Veranstaltungen initialisieren
 let veranstaltungen = [];
+const auditLogPfad = './audit.txt';
 
 // API-Endpunkt: Alle genehmigten Veranstaltungen abfragen, nach Datum sortiert
-app.get('/veranstaltungen', (req, res) => {
+server.get('/api/v1/veranstaltungen', (req, res) => {
     const genehmigteVeranstaltungen = veranstaltungen.filter(veranstaltung => veranstaltung.genehmigt).sort((a, b) => new Date(b.datum) - new Date(a.datum));
     res.json(genehmigteVeranstaltungen);
 });
 
 // API-Endpunkt: Alle nicht genehmigten Veranstaltungen abfragen
-app.get('/veranstaltungen/ausstehend', (req, res) => {
+server.get('/api/v1/veranstaltungen/ausstehend', (req, res) => {
     const ausstehendeVeranstaltungen = veranstaltungen.filter(veranstaltung => !veranstaltung.genehmigt);
     res.json(ausstehendeVeranstaltungen);
 });
 
+
+// API-Endpunkt: Veranstaltung anhand der ID abfragen
+server.get('/api/v1/veranstaltungen/:id', (req, res) => {
+    const veranstaltung = veranstaltungen.find(veranstaltung => veranstaltung.id === parseInt(req.params.id));
+    if (!veranstaltung) {
+        return res.status(404).send('Veranstaltung nicht gefunden');
+    }
+    res.json(veranstaltung);
+});
+
+// API-Endpunkt: Suche nach Veranstaltungen anhand von Titel oder Ort
+server.get('/api/v1/veranstaltungen/suche', (req, res) => {
+    const { query } = req.query;
+    const gefilterteVeranstaltungen = veranstaltungen.filter(veranstaltung => veranstaltung.name.includes(query) || veranstaltung.ort.includes(query));
+    res.json(gefilterteVeranstaltungen);
+});
+
 // API-Endpunkt: Neue Veranstaltung anlegen
-app.post('/veranstaltungen', (req, res) => {
+server.post('/api/v1/veranstaltungen', (req, res) => {
     const { name, beschreibung, ort, datum, preis } = req.body;
     if (!name || !beschreibung || !ort || !datum || !preis) { // Überprüfung auf Vollständigkeit
         return res.status(400).send('Pflichtfelder nicht ausgefüllt');
@@ -56,24 +66,9 @@ app.post('/veranstaltungen', (req, res) => {
     res.status(201).json(neueVeranstaltung);
 });
 
-// API-Endpunkt: Veranstaltung anhand der ID abfragen
-app.get('/veranstaltungen/:id', (req, res) => {
-    const veranstaltung = veranstaltungen.find(veranstaltung => veranstaltung.id === parseInt(req.params.id));
-    if (!veranstaltung) {
-        return res.status(404).send('Veranstaltung nicht gefunden');
-    }
-    res.json(veranstaltung);
-});
-
-// API-Endpunkt: Suche nach Veranstaltungen anhand von Titel oder Ort
-app.get('/veranstaltungen/suche', (req, res) => {
-    const { query } = req.query;
-    const gefilterteVeranstaltungen = veranstaltungen.filter(veranstaltung => veranstaltung.name.includes(query) || veranstaltung.ort.includes(query));
-    res.json(gefilterteVeranstaltungen);
-});
 
 // API-Endpunkt: Veranstaltung löschen
-app.delete('/veranstaltungen/:id', (req, res) => {
+server.delete('/api/v1/veranstaltungen/:id', (req, res) => {
     const index = veranstaltungen.findIndex(veranstaltung => veranstaltung.id === parseInt(req.params.id));
     if (index === -1) {
         return res.status(404).send('Veranstaltung nicht gefunden');
@@ -83,7 +78,7 @@ app.delete('/veranstaltungen/:id', (req, res) => {
 });
 
 // API-Endpunkt: Veranstaltung bearbeiten
-app.put('/veranstaltungen/:id', (req, res) => {
+server.put('/api/v1/veranstaltungen/:id', (req, res) => {
     const index = veranstaltungen.findIndex(veranstaltung => veranstaltung.id === parseInt(req.params.id));
     if (index === -1) {
         return res.status(404).send('Veranstaltung nicht gefunden');
@@ -94,41 +89,69 @@ app.put('/veranstaltungen/:id', (req, res) => {
 });
 
 // API-Endpunkt: Veranstaltung genehmigen
-app.patch('/veranstaltungen/:id/genehmigen', (req, res) => {
+server.patch('/api/v1/veranstaltungen/:id/genehmigen', (req, res) => {
     const veranstaltung = veranstaltungen.find(veranstaltung => veranstaltung.id === parseInt(req.params.id));
     if (!veranstaltung) {
         return res.status(404).send('Veranstaltung nicht gefunden');
     }
     else if (veranstaltung.genehmigt) {
         return res.status(400).send('Veranstaltung bereits genehmigt');
-
     }
-
     // Genehmigungslogik
     veranstaltung.genehmigt = true;
     // Veranstaltung als genehmigt  markieren und die Änderungen  speichern
     return res.json(veranstaltung); // Sendet die aktualisierte Veranstaltung zurück
-
 });
 
 // API-Endpunkt für die Übermittlung von externen Daten
-app.post('/externe-daten', (req, res) => {
+server.post('/api/v1/veranstaltungen/externe-daten', (req, res) => {
     // Logik zur Verarbeitung externer Daten könnte hier implementiert werden
-    res.status(200).send('Endpunkt für externe Daten erreicht');
+    res.status(200).send('Externe Daten übermittelt');
 });
 
 // API-Endpunkt zum Erstellen von Testdaten
-app.get('/testdaten-generieren', (req, res) => {
+server.get('/api/v1/veranstaltungen/testdaten-generieren', (req, res) => {
     // Beispiel für das Generieren von Testdaten
     veranstaltungen = [
         { id: 1, name: 'Testveranstaltung 1', beschreibung: 'Dies ist eine Testveranstaltung', ort: 'Heidenheim', datum: '2023-10-01', preis: 'Kostenlos', genehmigt: true },
-        { id: 2, name: 'Testveranstaltung 2', beschreibung: 'Eine weitere Testveranstaltung', ort: 'Heidenheim', datum: '2023-11-01', preis: '20 EUR', genehmigt: false }
+        { id: 2, name: 'Testveranstaltung 2', beschreibung: 'Dies ist eine weitere Testveranstaltung', ort: 'Heidenheim', datum: '2023-11-01', preis: '20 EUR', genehmigt: false }
     ];
     res.status(201).send(veranstaltungen);
 });
 
+// Genehmigte Veranstaltung im Audit protokollieren
+server.patch('/api/v1/veranstaltungen/:id/genehmigen', (req, res) => {
+    const { id } = req.params;
+    const veranstaltung = veranstaltungen.find(veranstaltung => veranstaltung.id === parseInt(id));
+
+    if (!veranstaltung) {
+        return res.status(404).send('Veranstaltung nicht gefunden');
+    }
+
+    // Überprüfen, ob die Veranstaltung bereits genehmigt wurde
+    if (veranstaltung.genehmigt) {
+        return res.status(400).send('Veranstaltung bereits genehmigt');
+    }
+
+    // Veranstaltung als genehmigt markieren
+    veranstaltung.genehmigt = true;
+
+    // Protokollieren der Genehmigung in die Audit-Datei
+    const logNachricht = `Veranstaltung mit ID ${veranstaltung.id} wurde am ${new Date().toISOString()} genehmigt.\n`;
+    fs.appendFile(auditLogPfad, logNachricht, err => {
+        if (err) {
+            console.error('Fehler beim Schreiben in die Audit-Datei:', err);
+            return res.status(500).send('Fehler beim Protokollieren der Genehmigung');
+        }
+
+        console.log('Genehmigung protokolliert');
+        res.json(veranstaltung); // Sendet die aktualisierte Veranstaltung zurück
+    });
+});
+
+
 // Server starten
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server läuft auf Port ${port}`);
 });
 
